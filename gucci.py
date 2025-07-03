@@ -69,9 +69,13 @@ async def scrape_gucci_handbags():
                 price_el = await item.query_selector('.price .sale') or await item.query_selector('.price')
                 price = (await price_el.inner_text()).strip() if price_el else ""
 
-                # Product link in a tag inside product-tiles-grid-item-info
-                link_el = await item.query_selector('a')
-                link = await link_el.get_attribute("href") if link_el else ""
+                # Get the parent <a> of the info div for the product link
+                link = await item.evaluate("""
+                    (info) => {
+                        let parent = info.closest('a.product-tiles-grid-item-link');
+                        return parent ? parent.getAttribute('href') : '';
+                    }
+                """)
                 if link and not link.startswith("http"):
                     link = "https://www.gucci.com" + link
 
