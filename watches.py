@@ -2,9 +2,9 @@ import asyncio
 import json
 from playwright.async_api import async_playwright
 
-URL = "https://www.gucci.com/us/en/ca/women/handbags-c-women-handbags"
+URL = "https://www.gucci.com/us/en/ca/jewelry-watches/watches/watches-for-women-c-jewelry-watches-watches-women"
 
-async def scrape_gucci_handbags():
+async def scrape_gucci_watches():
     async with async_playwright() as p:
         browser = await p.firefox.launch(headless=True)
         context = await browser.new_context(
@@ -35,18 +35,14 @@ async def scrape_gucci_handbags():
                 let loadMoreBtn = document.querySelector(loadMoreSelector);
 
                 if (loadMoreBtn && !loadMoreBtn.disabled && loadMoreBtn.offsetParent !== null) { // Button is visible
-                    console.log(`Clicking Load More button... [Scroll ${scrollCount + 1}]`);
                     loadMoreBtn.click();
                     await sleep(3000); // Wait for items to load
                 } else {
-                    console.log(`Scrolling... [Scroll ${scrollCount + 1}]`);
                     window.scrollBy(0, 5000);
                     await sleep(1000);
                     scrollCount++;
                 }
             }
-
-            console.log('Finished scrolling. Either maximum scrolls reached or no more Load More button.');
         })();
         """)
         await asyncio.sleep(10)
@@ -88,14 +84,14 @@ async def scrape_gucci_handbags():
                 print("Error extracting item:", e)
 
         # Save to JSON
-        with open("gucci.json", "w", encoding="utf-8") as f:
+        with open("watches.json", "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
 
-        print(f"Saved {len(results)} items to gucci.json.")
+        print(f"Saved {len(results)} items to watches.json.")
         await browser.close()
 
 async def main():
-    await scrape_gucci_handbags()
+    await scrape_gucci_watches()
 
 if __name__ == "__main__":
     asyncio.run(main())
