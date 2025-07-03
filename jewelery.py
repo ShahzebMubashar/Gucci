@@ -2,9 +2,9 @@ import asyncio
 import json
 from playwright.async_api import async_playwright
 
-URL = "https://www.gucci.com/us/en/ca/women/accessories-for-women-c-women-accessories"
+URL = "https://www.gucci.com/us/en/ca/jewelry-watches/gold-jewelry/gold-jewelry-for-women-c-jewelry-watches-fine-jewelry-women"
 
-async def scrape_gucci_accessories():
+async def scrape_gucci_jewelery():
     async with async_playwright() as p:
         browser = await p.firefox.launch(headless=True)
         context = await browser.new_context(
@@ -78,14 +78,14 @@ async def scrape_gucci_accessories():
                 print("Error extracting item:", e)
 
         # Save to JSON
-        with open("accessories.json", "w", encoding="utf-8") as f:
+        with open("jewelery.json", "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
 
-        print(f"Saved {len(results)} items to accessories.json.")
+        print(f"Saved {len(results)} items to jewelery.json.")
         await browser.close()
 
 async def main():
-    await scrape_gucci_accessories()
+    await scrape_gucci_jewelery()
 
 if __name__ == "__main__":
     asyncio.run(main())
